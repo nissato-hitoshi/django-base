@@ -1,0 +1,20 @@
+{% extends 'base_not_login.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load bootstrap_icons %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <h1 class="mb-5">{% trans "Verify Your E-mail Address" %}</h1>
+            <p>{% blocktrans %}確認のために電子メールを送信しました。提供されたリンクに従って、サインアップ プロセスを完了します。メインの受信トレイに確認メールが届かない場合は、スパム フォルダを確認してください。数分経っても確認メールが届かない場合は、お問い合わせください。{% endblocktrans %}</p>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+{% endblock %}

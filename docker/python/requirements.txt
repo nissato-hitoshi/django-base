@@ -1,2 +1,13 @@
 Django==4.0
 mysqlclient
+django-allauth
+uwsgi==2.0.18
+autopep8
+django-bootstrap5
+django-bootstrap-icons
+djangorestframework
+markdown
+django-filter
+openpyxl
+pandas
+python-dotenv

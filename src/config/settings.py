@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,6 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',         # 追加
+    'allauth',                      # 追加
+    'allauth.account',              # 追加
+    'allauth.socialaccount',        # 追加
+    'django.contrib.humanize',      # 追加 書式指定用
+    'django_bootstrap5',            # 追加
+    'django_bootstrap_icons',       # 追加
 ]
 
 MIDDLEWARE = [
@@ -54,7 +62,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,8 +83,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_app',
+        'USER': 'root',
+        'PASSWORD': 'jcsadmin',
+        'HOST': 'db',
+        'POST': 3306
     }
 }
 
@@ -103,11 +115,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
+USE_L10N = True
 
 USE_TZ = True
 
@@ -115,9 +128,41 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# htmlファイルなどから読み込むstaticフォルダの場所を記述
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
+# サービス内でmediaフォルダのURLパスを設定
+MEDIA_URL = '/media/'
+
+# アップロードファイルなどを読み込む際のフォルダの場所を記述
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#AUTH_USER_MODEL = 'accounts.CustomUser'
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', #デフォルトの認証基盤
+    'allauth.account.auth_backends.AuthenticationBackend' # メールアドレスとパスワードの両方を用いて認証するために必要
+)
+ 
+ACCOUNT_AUTHENTICATION_METHOD = 'email' # メールアドレス（とパスワードで）認証する
+ACCOUNT_USERNAME_REQUIRED = True # サインアップ（ユーザー登録）の時にユーザーネームを尋ねる
+ACCOUNT_EMAIL_REQUIRED = True # サインアップ（ユーザー登録）の時にメールアドレスを尋ねる
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory' # メール検証を必須とする
+ 
+LOGIN_URL = '/account/login/' # ログインURLの設定
+LOGIN_REDIRECT_URL = 'home' # ログイン後のリダイレクト先
+ACCOUNT_LOGOUT_REDIRECT_URL = '/account/login/' #　ログアウト後のリダイレクト先
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
